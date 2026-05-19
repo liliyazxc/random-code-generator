@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>彩票随机码生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #0369a1;
+            font-size: 28px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .code-display {
+            background: linear-gradient(145deg, #075985, #0369a1);
+            border-radius: 12px;
+            padding: 25px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        .code-text {
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-refresh {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+            color: white;
+        }
+
+        .btn-refresh:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(6, 182, 212, 0.3);
+        }
+
+        .btn-copy {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .btn-copy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .copy-success {
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .copied-message {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .copied-message.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .code-text {
+                font-size: 14px;
+                letter-spacing: 1px;
+            }
+
+            .btn {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎟️ 彩票随机码生成器</h1>
+        
+        <div class="code-display">
+            <div class="code-text" id="codeDisplay"></div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-refresh" onclick="generateCode()">
+                🔄 刷新生成
+            </button>
+            <button class="btn btn-copy" onclick="copyCode()">
+                📋 复制代码
+            </button>
+        </div>
+
+        <div class="copied-message" id="copiedMessage">✓ 已复制到剪贴板</div>
+    </div>
+
+    <script>
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const digits = '0123456789';
+
+        function generateSegment(length, useChars = true) {
+            const pool = useChars ? chars : digits;
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += pool[Math.floor(Math.random() * pool.length)];
+            }
+            return result;
+        }
+
+        function generateCode() {
+            const parts = [];
+            for (let i = 0; i < 5; i++) {
+                parts.push(generateSegment(4));
+            }
+            const middle = generateSegment(8, false);
+            const end = generateSegment(5);
+            
+            const fullCode = parts.join('-') + '/' + middle + '/' + end;
+            document.getElementById('codeDisplay').textContent = fullCode;
+        }
+
+        async function copyCode() {
+            const code = document.getElementById('codeDisplay').textContent;
+            if (!code) {
+                generateCode();
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(code);
+                const message = document.getElementById('copiedMessage');
+                message.classList.add('show');
+                setTimeout(() => {
+                    message.classList.remove('show');
+                }, 2000);
+            } catch (err) {
+                console.error('复制失败:', err);
+            }
+        }
+
+        generateCode();
+    </script>
+</body>
+</html>
