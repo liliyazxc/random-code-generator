@@ -21,58 +21,72 @@
             padding: 20px;
         }
 
+        .wrapper {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            width: 100%;
+            align-items: stretch;
+        }
+
         .container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            padding: 40px;
-            max-width: 700px;
-            width: 100%;
+            padding: 30px;
+            flex: 1;
             text-align: center;
+            display: flex;
+            flex-direction: column;
         }
 
         h1 {
             color: #0369a1;
-            font-size: 28px;
-            margin-bottom: 30px;
+            font-size: 22px;
+            margin-bottom: 20px;
             font-weight: 600;
         }
 
         .code-display {
             background: linear-gradient(145deg, #075985, #0369a1);
             border-radius: 12px;
-            padding: 25px 20px;
-            margin-bottom: 30px;
+            padding: 20px 15px;
+            margin-bottom: 20px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             overflow-x: auto;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
         }
 
         .code-text {
             color: white;
             font-family: 'Courier New', monospace;
-            font-size: 16px;
-            letter-spacing: 2px;
+            font-size: 15px;
+            letter-spacing: 1.5px;
             white-space: nowrap;
         }
 
         .btn-group {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
         }
 
         .btn {
-            padding: 14px 32px;
+            padding: 12px 24px;
             border: none;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .btn-refresh {
@@ -109,12 +123,12 @@
         }
 
         .copied-message {
-            margin-top: 20px;
-            padding: 12px 20px;
+            margin-top: 15px;
+            padding: 10px 16px;
             background: rgba(16, 185, 129, 0.1);
             color: #059669;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -123,13 +137,19 @@
             opacity: 1;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 900px) {
+            .wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+
             .container {
-                padding: 25px;
+                width: 100%;
+                max-width: 600px;
             }
 
             h1 {
-                font-size: 22px;
+                font-size: 20px;
             }
 
             .code-text {
@@ -138,30 +158,84 @@
             }
 
             .btn {
-                padding: 12px 24px;
+                padding: 10px 20px;
                 font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            .code-text {
+                font-size: 13px;
+                letter-spacing: 0.5px;
+            }
+
+            .btn {
+                padding: 10px 18px;
+                font-size: 13px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎟️ 彩票随机码生成器</h1>
-        
-        <div class="code-display">
-            <div class="code-text" id="codeDisplay"></div>
+    <div class="wrapper">
+        <!-- 生成器一 -->
+        <div class="container">
+            <h1>一、七组随机码</h1>
+            <div class="code-display">
+                <div class="code-text" id="codeDisplay1"></div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-refresh" onclick="generateCode1()">
+                    刷新生成
+                </button>
+                <button class="btn btn-copy" onclick="copyCode1()">
+                    复制代码
+                </button>
+            </div>
+            <div class="copied-message" id="copiedMessage1">已复制到剪贴板</div>
         </div>
 
-        <div class="btn-group">
-            <button class="btn btn-refresh" onclick="generateCode()">
-                🔄 刷新生成
-            </button>
-            <button class="btn btn-copy" onclick="copyCode()">
-                📋 复制代码
-            </button>
+        <!-- 生成器二 -->
+        <div class="container">
+            <h1>二、四组八位随机码</h1>
+            <div class="code-display">
+                <div class="code-text" id="codeDisplay2"></div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-refresh" onclick="generateCode2()">
+                    刷新生成
+                </button>
+                <button class="btn btn-copy" onclick="copyCode2()">
+                    复制代码
+                </button>
+            </div>
+            <div class="copied-message" id="copiedMessage2">已复制到剪贴板</div>
         </div>
 
-        <div class="copied-message" id="copiedMessage">✓ 已复制到剪贴板</div>
+        <!-- 原有生成器三 -->
+        <div class="container">
+            <h1>三、混合格式随机码</h1>
+            <div class="code-display">
+                <div class="code-text" id="codeDisplay3"></div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-refresh" onclick="generateCode3()">
+                    刷新生成
+                </button>
+                <button class="btn btn-copy" onclick="copyCode3()">
+                    复制代码
+                </button>
+            </div>
+            <div class="copied-message" id="copiedMessage3">已复制到剪贴板</div>
+        </div>
     </div>
 
     <script>
@@ -177,38 +251,90 @@
             return result;
         }
 
-        function generateCode() {
+        // 生成器一：7组4位字母数字随机
+        function generateCode1() {
+            const parts = [];
+            for (let i = 0; i < 7; i++) {
+                parts.push(generateSegment(4));
+            }
+            const fullCode = parts.join('-');
+            document.getElementById('codeDisplay1').textContent = fullCode;
+        }
+
+        async function copyCode1() {
+            const code = document.getElementById('codeDisplay1').textContent;
+            if (!code) {
+                generateCode1();
+                return;
+            }
+            try {
+                await navigator.clipboard.writeText(code);
+                const message = document.getElementById('copiedMessage1');
+                message.classList.add('show');
+                setTimeout(() => message.classList.remove('show'), 2000);
+            } catch (err) {
+                console.error('复制失败:', err);
+            }
+        }
+
+        // 生成器二：4组8位字母数字随机
+        function generateCode2() {
+            const parts = [];
+            for (let i = 0; i < 4; i++) {
+                parts.push(generateSegment(8));
+            }
+            const fullCode = parts.join('-');
+            document.getElementById('codeDisplay2').textContent = fullCode;
+        }
+
+        async function copyCode2() {
+            const code = document.getElementById('codeDisplay2').textContent;
+            if (!code) {
+                generateCode2();
+                return;
+            }
+            try {
+                await navigator.clipboard.writeText(code);
+                const message = document.getElementById('copiedMessage2');
+                message.classList.add('show');
+                setTimeout(() => message.classList.remove('show'), 2000);
+            } catch (err) {
+                console.error('复制失败:', err);
+            }
+        }
+
+        // 原有生成器三：5组4位 + 8位数字 + 5位字母数字
+        function generateCode3() {
             const parts = [];
             for (let i = 0; i < 5; i++) {
                 parts.push(generateSegment(4));
             }
             const middle = generateSegment(8, false);
             const end = generateSegment(5);
-            
             const fullCode = parts.join('-') + '/' + middle + '/' + end;
-            document.getElementById('codeDisplay').textContent = fullCode;
+            document.getElementById('codeDisplay3').textContent = fullCode;
         }
 
-        async function copyCode() {
-            const code = document.getElementById('codeDisplay').textContent;
+        async function copyCode3() {
+            const code = document.getElementById('codeDisplay3').textContent;
             if (!code) {
-                generateCode();
+                generateCode3();
                 return;
             }
-
             try {
                 await navigator.clipboard.writeText(code);
-                const message = document.getElementById('copiedMessage');
+                const message = document.getElementById('copiedMessage3');
                 message.classList.add('show');
-                setTimeout(() => {
-                    message.classList.remove('show');
-                }, 2000);
+                setTimeout(() => message.classList.remove('show'), 2000);
             } catch (err) {
                 console.error('复制失败:', err);
             }
         }
 
-        generateCode();
+        // 初始化
+        generateCode1();
+        generateCode2();
+        generateCode3();
     </script>
 </body>
 </html>
